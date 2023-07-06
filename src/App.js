@@ -50,7 +50,7 @@ function App() {
 
     //concept of react life-cycle
     const unsubscribe = onAuthStateChanged(auth,(data)=>{ 
-      // console.log(data)   
+      console.log(data)   
       setUser(data)
     })
 
