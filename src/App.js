@@ -119,7 +119,7 @@ function App() {
 
               <HStack bg={'blue.100'} w={'full'} justifyContent={"space-between"}>
               <Button onClick={logoutHandler} colorScheme="green" >Logout</Button>
-              <Text fontWeight={'bold'} fontSize={'large'} textAlign={'center'} w={'full'}>Messages</Text>
+              <Text fontWeight={'bold'} fontSize={'large'} textAlign={'center'} w={'full'}>ChatRoom</Text>
               </HStack>
 
               <VStack gap={'0'} h={'full'} w={'full'} overflowY={'auto'} css={{'&::-webkit-scrollbar':{
