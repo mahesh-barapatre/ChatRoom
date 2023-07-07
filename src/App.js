@@ -4,17 +4,35 @@ import Message from "./components/Message";
 import {onAuthStateChanged , getAuth , GoogleAuthProvider , signInWithPopup , signOut } from "firebase/auth"
 import {getFirestore , addDoc, collection, serverTimestamp, onSnapshot, query, orderBy } from "firebase/firestore"
 import { app } from "./components/firebase";
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const loginHandler=()=>{
+const loginHandler=async()=>{
   const provider = new GoogleAuthProvider();
 
-  signInWithPopup(auth, provider)
+  await signInWithPopup(auth, provider)
+  toast.success('Login Successful', {
+    position: "top-center",
+    autoClose: 500,
+    hideProgressBar: true,
+    theme: "light",
+    });
+  
 }
 
-const logoutHandler=()=>signOut(auth)
+const logoutHandler=()=>{
+  signOut(auth)
+  toast.warning('Logout!', {
+    position: "top-right",
+    autoClose: 1000,
+    hideProgressBar: true,
+    theme: "light",
+    });
+}
 
 function App() {
 
@@ -37,10 +55,25 @@ function App() {
 
       })
 
+      toast.success('sent', {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: true,
+        theme: "light",
+        });
       divForScroll.current.scrollIntoView({behavior: "smooth"})
       
     } catch (error) {
-      alert(error)
+      toast.error(error, {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
   
   }
@@ -50,7 +83,7 @@ function App() {
 
     //concept of react life-cycle
     const unsubscribe = onAuthStateChanged(auth,(data)=>{ 
-      console.log(data)   
+      // console.log(data)   
       setUser(data)
     })
 
@@ -72,6 +105,9 @@ function App() {
 
   return (
     <Box bg={'white'}>
+
+      <ToastContainer></ToastContainer>
+
     {
       user ? 
       (
