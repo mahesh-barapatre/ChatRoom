@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box , Container , VStack , HStack , Button, Input } from "@chakra-ui/react";
+import { Box , Container , VStack , HStack , Button, Input, Text } from "@chakra-ui/react";
 import Message from "./components/Message";
 import {onAuthStateChanged , getAuth , GoogleAuthProvider , signInWithPopup , signOut } from "firebase/auth"
 import {getFirestore , addDoc, collection, serverTimestamp, onSnapshot, query, orderBy } from "firebase/firestore"
@@ -44,6 +44,7 @@ function App() {
 
   const submithandler = async(e)=>{ 
     e.preventDefault()
+    // console.log(user.displayName)
   
     try {
       setMessage('')
@@ -51,6 +52,7 @@ function App() {
         text: message,
         uid: user.uid,
         uri: user.photoURL,
+        name: user.displayName,
         createdAt: serverTimestamp(),
 
       })
@@ -112,10 +114,15 @@ function App() {
       user ? 
       (
         
-            <Container bg={'blue.50'} h={'100vh'} padding={'4'} > 
+            <Container bg={'blue.50'} h={'100vh'} padding={'2'} > 
             <VStack h={'full'}>
-              <Button onClick={logoutHandler} colorScheme="green" w={'full'}>Logout</Button>
-              <VStack h={'full'} w={'full'} overflowY={'auto'} css={{'&::-webkit-scrollbar':{
+
+              <HStack bg={'blue.100'} w={'full'} justifyContent={"space-between"}>
+              <Button onClick={logoutHandler} colorScheme="green" >Logout</Button>
+              <Text fontWeight={'bold'} fontSize={'large'} textAlign={'center'} w={'full'}>Messages</Text>
+              </HStack>
+
+              <VStack gap={'0'} h={'full'} w={'full'} overflowY={'auto'} css={{'&::-webkit-scrollbar':{
                 display:'none',
               }}}>
                   {
@@ -125,6 +132,7 @@ function App() {
                       user={item.uid===user.uid ? 'me' : 'other'}
                       msg={item.text}
                       uri={item.uri}
+                      name={item.name}
                       />
                     })
                   }
