@@ -85,7 +85,7 @@ function App() {
 
     //concept of react life-cycle
     const unsubscribe = onAuthStateChanged(auth,(data)=>{ 
-      // console.log(data)   
+      console.log(data)   
       setUser(data)
     })
 
@@ -106,7 +106,7 @@ function App() {
   },[])
 
   return (
-    <Box bg={'white'}>
+    <Box bg={'blue.50'}>
 
       <ToastContainer></ToastContainer>
 
@@ -114,12 +114,12 @@ function App() {
       user ? 
       (
         
-            <Container bg={'blue.50'} h={'100vh'} padding={'2'} > 
+            <Container bgSize={'100% 100%'} bgImage={'https://mcdn.wallpapersafari.com/medium/76/18/I9kqSW.jpg'} h={'100vh'} padding={'2'} > 
             <VStack h={'full'}>
 
-              <HStack bg={'blue.100'} w={'full'} justifyContent={"space-between"}>
+              <HStack bgColor={'rgb(0, 0, 0, .5)'} w={'full'} justifyContent={"space-between"}>
               <Button onClick={logoutHandler} colorScheme="green" >Logout</Button>
-              <Text fontWeight={'bold'} fontSize={'large'} textAlign={'center'} w={'full'}>ChatRoom</Text>
+              <Text color={'whiteAlpha.900'} fontWeight={'bold'} fontSize={'large'} textAlign={'center'} w={'full'}>ChatRoom</Text>
               </HStack>
 
               <VStack gap={'0'} h={'full'} w={'full'} overflowY={'auto'} css={{'&::-webkit-scrollbar':{
@@ -138,7 +138,6 @@ function App() {
                   }
                   <div ref={divForScroll}></div>
               </VStack>
-
 
               <form onSubmit={submithandler} style={{width:'100%'}} >
               <HStack >
