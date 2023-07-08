@@ -24,21 +24,25 @@ const loginHandler=async()=>{
   
 }
 
-const logoutHandler=()=>{
-  signOut(auth)
-  toast.warning('Logout!', {
-    position: "top-right",
-    autoClose: 1000,
-    hideProgressBar: true,
-    theme: "light",
-    });
-}
 
 function App() {
-
+  
   const [user , setUser] = useState(false)
   const [message , setMessage] = useState('')
+  const [room , setRoom] = useState('OpenRoom')
+  const [temp , setTemp] = useState('OpenRoom')
   const [messages , setMessages] = useState([])
+  
+  const logoutHandler=()=>{
+    setTemp('OpenRoom')
+    signOut(auth)
+    toast.warning('Logout!', {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: true,
+      theme: "light",
+      });
+  }
 
   const divForScroll = useRef(null)
 
@@ -48,7 +52,7 @@ function App() {
   
     try {
       setMessage('')
-      await addDoc(collection(db,"Messages"),{
+      await addDoc(collection(db,`${room}`),{
         text: message,
         uid: user.uid,
         uri: user.photoURL,
@@ -81,11 +85,11 @@ function App() {
   }
 
   useEffect(()=>{
-    const q = query(collection(db,"Messages"),orderBy('createdAt',"asc"))
+    const q = query(collection(db,`${room}`),orderBy('createdAt',"asc"))
 
     //concept of react life-cycle
     const unsubscribe = onAuthStateChanged(auth,(data)=>{ 
-      console.log(data)   
+      // console.log(data)   
       setUser(data)
     })
 
@@ -103,7 +107,7 @@ function App() {
       unsubscribe()
       unsubscribeForMessage()   
     }  
-  },[])
+  },[room])
 
   return (
     <Box bg={'blue.50'}>
@@ -119,7 +123,7 @@ function App() {
 
               <HStack bgColor={'rgb(0, 0, 0, .5)'} w={'full'} justifyContent={"space-between"}>
               <Button onClick={logoutHandler} colorScheme="green" >Logout</Button>
-              <Text color={'whiteAlpha.900'} fontWeight={'bold'} fontSize={'large'} textAlign={'center'} w={'full'}>ChatRoom</Text>
+              <Text color={'whiteAlpha.900'} fontWeight={'bold'} fontSize={'large'} textAlign={'center'} w={'full'}>{room}</Text>
               </HStack>
 
               <VStack gap={'0'} h={'full'} w={'full'} overflowY={'auto'} css={{'&::-webkit-scrollbar':{
@@ -155,8 +159,16 @@ function App() {
       
       ) : (
         <VStack h={'100vh'} justifyContent={'center'}>
-            <Button onClick={loginHandler} colorScheme="green">Sign In with Google</Button>
+
+            <Text fontSize={'large'}>JOIN OR CREATE ROOM:</Text>
+            <Input w={'60vh'} placeholder="Enter Room name..." bgColor={'blue.100'} onChange={(e)=>setTemp(e.target.value)}></Input>
+            <Button onClick={
+              ()=>{setRoom(temp)
+                    loginHandler()
+                  }
+            } colorScheme="green">Sign In with Google</Button>
         </VStack>
+  
       )
     }
     </Box>
