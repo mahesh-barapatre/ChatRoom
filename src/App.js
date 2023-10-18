@@ -153,6 +153,15 @@ function App() {
                   value={message}
                   onChange={(e)=>setMessage(e.target.value)} 
                   placeholder="Enter a Message..." colorScheme="blue" bg={'blue.100'}></Input>
+                  <Button colorScheme="red" onClick={()=>setVisible(!visible)}>:)</Button>
+                  {visible && 
+                    <div style={{position:'absolute',top:'3cm', left:'20cm'}}>
+                    <Picker data={data} onEmojiSelect={(object)=>{
+                    setMessage(message+object.native)
+                    setVisible(!visible)
+                  }} />
+                    </div>
+                  }
                 <Button type="submit" colorScheme="green">Send</Button>
               </HStack>
       
