@@ -5,6 +5,8 @@ import {onAuthStateChanged , getAuth , GoogleAuthProvider , signInWithPopup , si
 import {getFirestore , addDoc, collection, serverTimestamp, onSnapshot, query, orderBy } from "firebase/firestore"
 import { app } from "./components/firebase";
 import { ToastContainer, toast } from 'react-toastify';
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -26,6 +28,8 @@ const loginHandler=async()=>{
 
 
 function App() {
+
+  let[visible, setVisible] = useState(false);
   
   const [user , setUser] = useState(false)
   const [message , setMessage] = useState('')
@@ -161,7 +165,19 @@ function App() {
         <VStack h={'100vh'} justifyContent={'center'}>
 
             <Text fontSize={'large'}>JOIN OR CREATE ROOM:</Text>
-            <Input w={'60vh'} placeholder="Enter Room name..." bgColor={'blue.100'} onChange={(e)=>setTemp(e.target.value)}></Input>
+            <HStack>
+
+            <Input value={temp} w={'60vh'} placeholder="Enter Room name..." bgColor={'blue.100'} onChange={(e)=>setTemp(e.target.value)}></Input>
+            <Button colorScheme="red" onClick={()=>setVisible(!visible)}>:)</Button>
+            {visible && 
+      <div style={{position:'absolute',top:'3cm', left:'20cm'}}>
+        <Picker data={data} onEmojiSelect={(object)=>{
+      setTemp(temp+object.native)
+      setVisible(!visible)
+    }} />
+      </div>
+    }
+            </HStack>
             <Button onClick={
               ()=>{setRoom(temp)
                     loginHandler()
